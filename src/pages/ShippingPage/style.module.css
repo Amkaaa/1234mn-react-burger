@@ -1,0 +1,11 @@
+.shippingPage {
+    width: 80%;
+    text-align: center;
+    margin: 20px auto;
+}
+
+@media (min-width: 600px) {
+    .shippingPage {
+        width: 700px;
+    }
+}
