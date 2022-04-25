@@ -31,13 +31,14 @@ const initialState = {
         },
     },
     totalPrice: 1000,
+    purchasing: false,
 }
 
 const reducer = (state = initialState, action) => {
     switch(action.type) {
         case ADD_INGREDIENT:
-            console.log(action)
             return {
+                ...state,
                 ingredients: {
                     ...state.ingredients,
                     [action.payload]: {
@@ -46,21 +47,22 @@ const reducer = (state = initialState, action) => {
                     }
                 },
                 totalPrice: state.totalPrice + state.ingredients[action.payload].price,
+                purchasing: true,
             }
         case REMOVE_INGREDIENT:
-            if(state.ingredients[action.payload].count > 0){
-                return {
-                    ingredients: {
-                        ...state.ingredients,
-                        [action.payload]: {
-                            ...state.ingredients[action.payload],
-                            count: state.ingredients[action.payload].count - 1,
-                        }
-                    },
-                    totalPrice: state.totalPrice - state.ingredients[action.payload].price,
-                }
+            const newPrice = state.totalPrice - state.ingredients[action.payload].price
+            return {
+                ...state,
+                ingredients: {
+                    ...state.ingredients,
+                    [action.payload]: {
+                        ...state.ingredients[action.payload],
+                        count: state.ingredients[action.payload].count - 1,
+                    }
+                },
+                totalPrice: newPrice,
+                purchasing: newPrice > 1000,
             }
-            return state;
         default:
             return state;
     }

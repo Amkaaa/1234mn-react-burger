@@ -4,7 +4,7 @@ import './index.css';
 import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import burgerReducer from './redux/reducer/burgerReducer';
 
@@ -12,7 +12,21 @@ const container = document.getElementById('app');
 
 const root = createRoot(container)
 
-const store = createStore(burgerReducer);
+const loggerMiddleware = store => {
+  return next => {
+    return action => {
+      console.log('My Logger middleware [Dispatching] ==> ', action)
+      console.log('My Logger middleware [State BEFORE] ==> ', store.getState())
+      const result = next(action);
+      console.log('My Logger middleware [State AFTER] ==> ', store.getState())
+      return result;
+    }
+  }
+}
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(burgerReducer, composeEnhancers(applyMiddleware(loggerMiddleware)));
 
 root.render(
   <React.StrictMode>

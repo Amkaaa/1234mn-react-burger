@@ -1,5 +1,6 @@
 import BurgerIngredient from "../BurgerIngredient";
 import style from './style.module.css'
+import { connect } from "react-redux";
 
 const Burger = ({ ingredients }) => {
     let content = []
@@ -26,4 +27,10 @@ const Burger = ({ ingredients }) => {
     )
 }
 
-export default Burger;
+const mapStateToProps = state => {
+    return {
+        ingredients: state.ingredients,
+    }
+}
+
+export default connect(mapStateToProps, null)(Burger);
