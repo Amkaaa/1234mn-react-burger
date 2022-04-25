@@ -5,49 +5,19 @@ import Modal from '../../components/Utils/Modal'
 import Spinner from '../../components/Utils/Spinner'
 import OrderSummary from '../../components/OrderSummary'
 import {withRouter} from '../../with-router'
+import {connect} from 'react-redux'
+import * as actions from '../../redux/action/actionTypes'
 
 class BurgerPage extends Component {
     constructor(){
         super()
         this.state = {
-            ingredients: {
-                salad: {
-                    name: 'Салад',
-                    type: 'salad',
-                    price: 400,
-                    count: 0,
-                },
-                cheese: {
-                    name: 'Бяслаг',
-                    type: 'cheese',
-                    price: 500,
-                    count: 0,
-                },
-                bacon: {
-                    name: 'Бекон',
-                    type: 'bacon',
-                    price: 1000,
-                    count: 0,
-                },
-                meat: {
-                    name: 'Үхрийн мах',
-                    type: 'meat',
-                    price: 1200,
-                    count: 0,
-                },
-            },
-            totalPrice: 1000,
-            purchasable: false,
             purchasing: false,
             confirmOrder: false,
             loading: false
         }
 
         this.nextConfirmOrder = this.nextConfirmOrder.bind(this)
-    }
-
-    componentDidMount() {
-        // console.log(this.props)
     }
 
     nextConfirmOrder = () => {
@@ -154,15 +124,15 @@ class BurgerPage extends Component {
                     {this.state.loading ? <Spinner /> : <OrderSummary
                         hideConfirmOrder={this.hideConfirmOrder}
                         nextConfirmOrder={this.nextConfirmOrder} 
-                        ingredients={this.state.ingredients} 
-                        totalPrice={this.state.totalPrice} />}
+                        ingredients={this.props.ingredients} 
+                        totalPrice={this.props.totalPrice} />}
                 </Modal>
-                <Burger ingredients={this.state.ingredients} />
+                <Burger ingredients={this.props.ingredients} />
                 <BuildControls 
-                    addIngredient={this.addIngredient} 
-                    removeIngredient={this.removeIngredient} 
-                    ingredients={this.state.ingredients} 
-                    totalPrice={this.state.totalPrice} 
+                    addIngredient={this.props.addIngredient} 
+                    removeIngredient={this.props.removeIngredient} 
+                    ingredients={this.props.ingredients} 
+                    totalPrice={this.props.totalPrice} 
                     showConfirmOrder={this.showConfirmOrder}
                     btnDisable={!this.state.purchasing} />
             </div>
@@ -170,4 +140,18 @@ class BurgerPage extends Component {
     }
 }
 
-export default withRouter(BurgerPage);
+const mapStateToProps = state => {
+    return {
+        ingredients: state.ingredients,
+        totalPrice: state.totalPrice,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addIngredient: (ingredient) => dispatch(actions.addIngredient(ingredient)),
+        removeIngredient: (ingredient) => dispatch(actions.removeIngredient(ingredient)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(BurgerPage));
