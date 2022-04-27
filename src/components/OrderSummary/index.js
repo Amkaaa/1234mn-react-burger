@@ -23,8 +23,8 @@ const OrderSummary = ({ ingredients, totalPrice, nextConfirmOrder, hideConfirmOr
 
 const mapStateToProps = state => {
     return {
-        ingredients: state.ingredients,
-        totalPrice: state.totalPrice
+        ingredients: state.burgerReducer.ingredients,
+        totalPrice: state.burgerReducer.totalPrice
     }
 }
 

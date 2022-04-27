@@ -1,6 +1,7 @@
 import { 
     ADD_INGREDIENT, 
-    REMOVE_INGREDIENT 
+    REMOVE_INGREDIENT,
+    CLEAR_ORDER,
 } from '../type';
 
 const initialState = {
@@ -63,6 +64,8 @@ const reducer = (state = initialState, action) => {
                 totalPrice: newPrice,
                 purchasing: newPrice > 1000,
             }
+        case CLEAR_ORDER:
+            return initialState;
         default:
             return state;
     }

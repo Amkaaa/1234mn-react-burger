@@ -79,7 +79,7 @@ class ShippingPage extends Component {
 
 const mapStateToProps = state => {
     return {
-        totalPrice: state.totalPrice,
+        totalPrice: state.burgerReducer.totalPrice,
     }
 }
 

@@ -2,7 +2,7 @@ import style from './style.module.css'
 import BuildControl from '../BuildControl'
 
 import {connect} from 'react-redux'
-import * as actions from '../../redux/action/actionTypes'
+import * as actions from '../../redux/actions/burgerActions'
 
 const BuildControls = ({ addIngredient, removeIngredient, ingredients, totalPrice, purchasing, showConfirmOrder }) => {
     return (
@@ -32,9 +32,9 @@ const BuildControls = ({ addIngredient, removeIngredient, ingredients, totalPric
 
 const mapStateToProps = state => {
     return {
-        ingredients: state.ingredients,
-        totalPrice: state.totalPrice,
-        purchasing: state.purchasing,
+        ingredients: state.burgerReducer.ingredients,
+        totalPrice: state.burgerReducer.totalPrice,
+        purchasing: state.burgerReducer.purchasing,
     }
 }
 
