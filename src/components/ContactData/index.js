@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
 
@@ -9,6 +9,7 @@ import * as orderActions from '../../redux/actions/orderActions'
 import * as burgerActions from '../../redux/actions/burgerActions'
 
 const ContactData = ({ newOrderStatus, userId, ingredients, totalPrice, saveOrder, clearOrder, clearBurger }) => {
+    const priceRef = useRef();
     const navigate = useNavigate();
 
     const [name, setName] = useState("");
@@ -30,6 +31,16 @@ const ContactData = ({ newOrderStatus, userId, ingredients, totalPrice, saveOrde
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newOrderStatus.finished, newOrderStatus.error])
 
+    const changeName = (e) => {
+        
+        if(priceRef.current.style.color === 'red') {
+            priceRef.current.style.color = "green";
+        } else {
+            priceRef.current.style.color = "red";
+        }
+        setName(e.target.value)
+    }
+
     const saveOrderClick = () => {
         
         const order = {
@@ -50,7 +61,10 @@ const ContactData = ({ newOrderStatus, userId, ingredients, totalPrice, saveOrde
 
     return (
         <div className={style.contactData}>
-            <input onChange={e => setName(e.target.value)} type="text" name="name" placeholder="Таны нэр" />
+            <div ref={priceRef}>
+                <strong>Дүн: {totalPrice}₮</strong>
+            </div>
+            <input onChange={changeName} type="text" name="name" placeholder="Таны нэр" />
             <input onChange={e => setStreet(e.target.value)} type="text" name="street" placeholder="Таны гэрийн хаяг" />
             <input onChange={e => setCity(e.target.value)} type="text" name="city" placeholder="Таны хот" />
             {

@@ -1,18 +1,27 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense, lazy } from 'react'
 import { connect } from 'react-redux'
 import { Routes, Route } from 'react-router-dom';
+import * as actions from '../../redux/actions/signupLoginActions';
 import styles from './style.module.css';
 import Toolbar from '../../components/Toolbar'
 import Sidebar from '../../components/Sidebar';
-import BurgerPage from '../BurgerPage';
-import OrderPage from '../OrderPage';
 import ShippingPage from '../ShippingPage';
 import Login from '../../components/Login';
 import Logout from '../../components/Logout';
-import Signup from '../../components/Signup';
 import PrivateRoute from '../../components/PrivateRoute';
 import NotFoundPage from '../NotFoundPage';
-import * as actions from '../../redux/actions/signupLoginActions';
+
+const BurgerPage = lazy(() => {
+  return import('../BurgerPage')
+})
+
+const OrderPage = lazy(() => {
+  return import('../OrderPage')
+})
+
+const Signup = lazy(() => {
+  return import('../../components/Signup')
+})
 
 const App = ({ userId, autoLogin, autoLogoutUser, logoutUser }) => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -45,40 +54,42 @@ const App = ({ userId, autoLogin, autoLogoutUser, logoutUser }) => {
         <Sidebar toggleSidebar={toggleSidebar} showSidebar={showSidebar} />
         <main className={styles.content}>
           <center><div>userId: {userId} </div></center>
-          <Routes>
-            <Route index element={
-              <PrivateRoute user={userId}>
-                <BurgerPage />
-              </PrivateRoute>
-            } />
-            
-            <Route path="logout" element={ 
-              <PrivateRoute user={userId}>
-                <Logout />
-              </PrivateRoute> 
-            } />
-            
-            <Route path="orders" element={ 
-              <PrivateRoute user={userId}>
-                <OrderPage />
-              </PrivateRoute>
-             } />
-            
-            <Route path="shipping/*" element={ 
-              <PrivateRoute user={userId}>
-                <ShippingPage />
-              </PrivateRoute>
-            } />
+          <Suspense fallback={<div>Түр хүлээ...</div>}>
+            <Routes>
+              <Route index element={
+                <PrivateRoute user={userId}>
+                  <BurgerPage />
+                </PrivateRoute>
+              } />
+              
+              <Route path="logout" element={ 
+                <PrivateRoute user={userId}>
+                  <Logout />
+                </PrivateRoute> 
+              } />
+              
+              <Route path="orders" element={ 
+                <PrivateRoute user={userId}>
+                  <OrderPage />
+                </PrivateRoute>
+              } />
+              
+              <Route path="shipping/*" element={ 
+                <PrivateRoute user={userId}>
+                  <ShippingPage />
+                </PrivateRoute>
+              } />
 
-            <Route path="*" element={ 
-              <PrivateRoute user={userId}>
-                <NotFoundPage />
-              </PrivateRoute>
-            } />
+              <Route path="*" element={ 
+                <PrivateRoute user={userId}>
+                  <NotFoundPage />
+                </PrivateRoute>
+              } />
 
-            <Route path="login" element={ <Login /> } />
-            <Route path="signup" element={ <Signup /> } />
-          </Routes>
+              <Route path="login" element={ <Login /> } />
+              <Route path="signup" element={ <Signup /> } />
+            </Routes>
+          </Suspense>
         </main>
     </div>
   );
