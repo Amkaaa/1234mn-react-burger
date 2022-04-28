@@ -5,6 +5,7 @@ import {
     SAVE_ORDER_SUCCESS,
     SAVE_ORDER_START,
     SAVE_ORDER_ERROR,
+    CLEAR_ORDER,
  } from "../type";
  import axios from '../../axios-order'
 
@@ -18,7 +19,6 @@ export const loadOrders = (userId) => {
             .get(`/orders.json?auth=${token}&orderBy="order/userId"&equalTo="${userId}"`)
             .then(res => {
                 const data = Object.entries(res.data).reverse()
-                console.log(res.data)
                 dispatch(loadOrdersSuccess(data));
             })
             .catch(err => {
@@ -83,5 +83,11 @@ export const saveOrderError = (err) => {
     return {
         type: SAVE_ORDER_ERROR,
         err
+    }
+}
+
+export const clearOrder = () => {
+    return {
+        type: CLEAR_ORDER,
     }
 }

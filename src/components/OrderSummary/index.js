@@ -1,6 +1,6 @@
+import { connect } from 'react-redux'
 import Button from '../Utils/Button'
 import style from './style.module.css'
-import { connect } from 'react-redux'
 
 const OrderSummary = ({ ingredients, totalPrice, nextConfirmOrder, hideConfirmOrder }) => {
     return <div className={style.orderSummary}>
@@ -28,4 +28,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, null)(OrderSummary)
+export default connect(mapStateToProps)(OrderSummary)

@@ -19,9 +19,6 @@ const Burger = ({ ingredients }) => {
         <div className={style.burger}>
             <BurgerIngredient type="bread-top" />
             {content}
-            {/* <BurgerIngredient type="cheese" />
-            <BurgerIngredient type="bacon" />
-            <BurgerIngredient type="salad" /> */}
             <BurgerIngredient type="bread-bottom" />
         </div>
     )
@@ -33,4 +30,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, null)(Burger);
+export default connect(mapStateToProps)(Burger);

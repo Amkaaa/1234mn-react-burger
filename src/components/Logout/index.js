@@ -1,20 +1,20 @@
-import { Component } from 'react'
+import { useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 import { connect } from 'react-redux'
-import * as actions from '../../redux/actions/loginActions'
+import { logoutUser } from '../../redux/actions/signupLoginActions'
 
-class Logout extends Component {
-    componentDidMount() {
-        this.props.logout()
-    }
-    render() {
-        return <Navigate to="/" replace />
-    }
+const Logout = ({ logoutUser }) => {
+    useEffect(()=> {
+        logoutUser()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
+    
+    return <Navigate to="/" replace />
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        logout: () => dispatch(actions.logoutUser())
+        logoutUser: () => dispatch(logoutUser())
     }
 }
 

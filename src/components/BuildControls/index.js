@@ -2,9 +2,8 @@ import style from './style.module.css'
 import BuildControl from '../BuildControl'
 
 import {connect} from 'react-redux'
-import * as actions from '../../redux/actions/burgerActions'
 
-const BuildControls = ({ addIngredient, removeIngredient, ingredients, totalPrice, purchasing, showConfirmOrder }) => {
+const BuildControls = ({ ingredients, totalPrice, purchasing, showConfirmOrder }) => {
     return (
         <div className={style.buildControls}>
             <p>Бургерийн үнэ: <strong>{totalPrice}</strong></p>
@@ -13,8 +12,6 @@ const BuildControls = ({ addIngredient, removeIngredient, ingredients, totalPric
                     return (
                         <BuildControl
                             key={index}
-                            addIngredient={addIngredient}
-                            removeIngredient={removeIngredient}
                             ingredient={ingredient}
                         />
                     )
@@ -38,11 +35,4 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        addIngredient: (ingredient) => dispatch(actions.addIngredient(ingredient)),
-        removeIngredient: (ingredient) => dispatch(actions.removeIngredient(ingredient)),
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(BuildControls)
+export default connect(mapStateToProps)(BuildControls)

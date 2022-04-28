@@ -8,7 +8,9 @@ const NotFoundPage = () => {
         setTimeout(()=> {
             navigate('/')
         }, 3000)
-    }, [navigate])
+        
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <div>
