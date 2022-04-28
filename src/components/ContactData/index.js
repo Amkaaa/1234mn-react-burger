@@ -1,63 +1,66 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Component } from 'react'
 import { connect } from 'react-redux'
 
-import style from './style.module.css'
 import Button from '../Utils/Button'
+import style from './style.module.css'
+import { withRouter } from '../../with-router'
 import Spinner from '../Utils/Spinner'
-import * as orderActions from '../../redux/actions/orderActions'
+import * as actions from '../../redux/actions/orderActions'
 import * as burgerActions from '../../redux/actions/burgerActions'
 
-const ContactData = ({ newOrderStatus, userId, ingredients, totalPrice, saveOrder, clearOrder, clearBurger }) => {
-    const navigate = useNavigate();
+class ContactData extends Component {
+    state = {
+        name: null,
+        city: null,
+        street: null,
+    }
 
-    const [name, setName] = useState("");
-    const [city, setCity] = useState("");
-    const [street, setStreet] = useState("");
+    changeName = (e) => {
+        this.setState({ name: e.target.value })
+    }
 
-    useEffect(()=> {
-        if(newOrderStatus.finished && !newOrderStatus.error) {
-            navigate('/orders', { replace: true })
+    changeCity = (e) => {
+        this.setState({ city: e.target.value })
+    }
+
+    changeStreet = (e) => {
+        this.setState({ street: e.target.value })
+    }
+
+    componentDidUpdate() {
+        if(this.props.newOrderStatus.finished && !this.props.newOrderStatus.error) {
+            this.props.navigate('/orders', { replace: true })
         }
+    }
 
-        return () => {
-            // Цэвэрлэгч функц: Захиалгыг хоосолно.
-            if(newOrderStatus.finished && !newOrderStatus.error) {
-                clearOrder()
-                clearBurger()
-            }
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [newOrderStatus.finished, newOrderStatus.error])
-
-    const saveOrderClick = () => {
+    saveOrder = () => {
         
         const order = {
-            userId,
-            ingredients,
-            totalPrice,
+            userId: this.props.userId,
+            ingredients: this.props.ingredients,
+            totalPrice: this.props.totalPrice,
             customer: {
-                name,
+                name: this.state.name,
                 address: {
-                    street,
-                    city
+                    street: this.state.street,
+                    city: this.state.city
                 }
             }
         }
         
-        saveOrder(order)
+        this.props.saveOrder(order);
     }
 
-    return (
-        <div className={style.contactData}>
-            <input onChange={e => setName(e.target.value)} type="text" name="name" placeholder="Таны нэр" />
-            <input onChange={e => setStreet(e.target.value)} type="text" name="street" placeholder="Таны гэрийн хаяг" />
-            <input onChange={e => setCity(e.target.value)} type="text" name="city" placeholder="Таны хот" />
+    render() {
+        return <div className={style.contactData}>
+            <input onChange={this.changeName} type="text" name="name" placeholder="Таны нэр" />
+            <input onChange={this.changeStreet} type="text" name="street" placeholder="Таны гэрийн хаяг" />
+            <input onChange={this.changeCity} type="text" name="city" placeholder="Таны хот" />
             {
-                newOrderStatus.saving ? <Spinner /> : <Button triggerBtn={saveOrderClick} type="success" text="ИЛГЭЭХ" />
+                this.props.newOrderStatus.saving ? <Spinner /> : <Button triggerBtn={this.saveOrder} type="success" text="ИЛГЭЭХ" />
             }
         </div>
-    )
+    }
 }
 
 const mapStateToProps = state => {
@@ -71,10 +74,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        saveOrder: (order) => dispatch(orderActions.saveOrder(order)),
-        clearBurger: () => dispatch(burgerActions.clearOrder()),
-        clearOrder: () => dispatch(orderActions.clearOrder()),
+        saveOrder: (order) => dispatch(actions.saveOrder(order)),
+        clearOrder: () => dispatch(burgerActions.clearOrder())
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactData)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ContactData))

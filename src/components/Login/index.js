@@ -1,66 +1,60 @@
-import { useState } from 'react'
+import { Component } from 'react'
 import { connect } from 'react-redux'
 import { Navigate } from 'react-router-dom'
-import { loginUser } from '../../redux/actions/signupLoginActions'
+import * as actions from '../../redux/actions/loginActions'
 import Button from '../Utils/Button'
 import Spinner from '../Utils/Spinner'
 import style from './style.module.css'
 
-const Login = ({ loading, error, userId, loginUser }) => {
-    const [form, setForm] = useState({
-        email: '',
-        password: ''
-    })
-
-    const changeEmail = (e) => {
-        const newEmail = e.target.value
-        setForm(( prevForm )=>({
-            ...prevForm,
-            email: newEmail
-        }))
+class Login extends Component {
+    state = {
+        email: "",
+        password: "",
     }
 
-    const changePassword = (e) => {
-        const newPassword = e.target.value
-        setForm(( prevForm )=>({
-            ...prevForm,
-            password: newPassword
-        }))
+    changeEmail = (e) => {
+        this.setState({email: e.target.value})
     }
 
-    const loginForm = (e) => {
+    changePassword = (e) => {
+        this.setState({password: e.target.value})
+    }
+
+    login = (e) => {
         e.preventDefault()
-        loginUser(form.email, form.password)
+        this.props.loginUser(this.state.email, this.state.password)
     }
 
-    return (
-        <div className={style.login}>
-            {userId && <Navigate to="/" /> }
-            <h1>Нэвтрэх</h1>
-            {
-                loading ? <Spinner /> : (<form>
-                    <input onChange={changeEmail} autoComplete=""  type="text" placeholder="Нэвтрэх нэр" />
-                    <input onChange={changePassword} autoComplete=""  type="password" placeholder="Нууц үг" />
-                    {
-                        error && (
-                            <div className={style.error}>{error}</div>
-                        )
-                    }
-                    {
-                        error && (
-                            <div className={style.error}>{error}</div>
-                        )
-                    }
-                    <Button type="success" text="Нэвтрэх" triggerBtn={loginForm} />
-                </form>)
-            }
-        </div>
-    )
+    render() {
+        return (
+            <div className={style.login}>
+                {this.props.userId && <Navigate to="/" /> }
+                <h1>Нэвтрэх</h1>
+                {
+                    this.props.loading ? <Spinner /> : (<form>
+                        <input onChange={this.changeEmail} autoComplete=''  type="text" placeholder="Нэвтрэх нэр" />
+                        <input onChange={this.changePassword} autoComplete=''  type="password" placeholder="Нууц үг" />
+                        {
+                            this.state.error && (
+                                <div className={style.error}>{this.state.error}</div>
+                            )
+                        }
+                        {
+                            this.props.error && (
+                                <div className={style.error}>{this.props.error}</div>
+                            )
+                        }
+                        <Button type="success" text="Нэвтрэх" triggerBtn={this.login} />
+                    </form>)
+                }
+            </div>
+        )
+    }
 }
 
 const mapStateToProps = state => {
     return {
-        loading: state.signupLoginReducer.loading,
+        loading: state.signupLoginReducer.loadLogin,
         error: state.signupLoginReducer.error,
         userId: state.signupLoginReducer.userId,
     }
@@ -68,7 +62,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        loginUser: (email, password) => dispatch(loginUser(email, password)),
+        loginUser: (email, password) => dispatch(actions.loginUser(email, password)),
     }
 }
 

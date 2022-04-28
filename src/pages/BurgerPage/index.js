@@ -1,41 +1,51 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Component } from 'react'
 import Burger from '../../components/Burger'
 import BuildControls from '../../components/BuildControls'
 import Modal from '../../components/Utils/Modal'
 import OrderSummary from '../../components/OrderSummary'
+import {withRouter} from '../../with-router'
 
-const  BurgerPage = () => {
-    const navigate = useNavigate()
-    const [confirmOrder, setConfirmOrder] = useState(false)
+class BurgerPage extends Component {
+    constructor(){
+        super()
+        this.state = {
+            confirmOrder: false,
+        }
 
-    const nextConfirmOrder = () => {
-        navigate('/shipping', {
-            replace: true
-        });
-
-        hideConfirmOrder()
+        this.nextConfirmOrder = this.nextConfirmOrder.bind(this)
     }
 
-    const hideConfirmOrder = () => {
-        setConfirmOrder(false)
+    nextConfirmOrder = () => {
+        this.props.navigate('/shipping');
+
+        this.hideConfirmOrder()
     }
 
-    const showConfirmOrder = () => {
-        setConfirmOrder(true)
+    hideConfirmOrder = () => {
+        this.setState({
+            confirmOrder: false,
+        })
     }
 
-    return (
-        <div>
-            <Modal show={confirmOrder} hideConfirmOrder={hideConfirmOrder} >
-                <OrderSummary
-                    hideConfirmOrder={hideConfirmOrder}
-                    nextConfirmOrder={nextConfirmOrder} />
-            </Modal>
-            <Burger />
-            <BuildControls showConfirmOrder={showConfirmOrder} />
-        </div>
-    )
+    showConfirmOrder = () => {
+        this.setState({
+            confirmOrder: true,
+        })
+    }
+
+    render() {
+        return (
+            <div>
+                <Modal show={this.state.confirmOrder} hideConfirmOrder={this.hideConfirmOrder} >
+                    <OrderSummary
+                        hideConfirmOrder={this.hideConfirmOrder}
+                        nextConfirmOrder={this.nextConfirmOrder} />
+                </Modal>
+                <Burger />
+                <BuildControls showConfirmOrder={this.showConfirmOrder} />
+            </div>
+        )
+    }
 }
 
-export default BurgerPage;
+export default (withRouter(BurgerPage));

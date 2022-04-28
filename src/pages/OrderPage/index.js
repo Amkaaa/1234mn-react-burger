@@ -1,22 +1,25 @@
-import { useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 
+// import axios from '../../axios-order'
 import Order from '../../components/Order'
 import Spinner from '../../components/Utils/Spinner'
 import * as actions from '../../redux/actions/orderActions'
 
-const OrderPage = ({ userId, loading, orders, loadOrders }) => {
+class OrderPage extends React.Component {
 
-    useEffect(() => {
-        loadOrders(userId)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    componentDidMount() {
+        this.props.loadOrders(this.props.userId)
+    }
     
-    return (
-        <div>
-            { loading ? <Spinner /> : orders.map((order) => (<Order key={order[0]} order={order[1]} />)) }
-        </div>
-    )
+    render() {
+        // console.log(JSON.stringify(this.props.orders))
+        return (
+            <div>
+                { this.props.loading ? <Spinner /> : this.props.orders.map((order) => (<Order key={order[0]} order={order[1]} />)) }
+            </div>
+        )
+    }
 }
 
 const mapStateToProps = state => {

@@ -1,6 +1,4 @@
 import style from './style.module.css'
-import {connect} from 'react-redux'
-import * as actions from '../../redux/actions/burgerActions'
 
 const BuildControl = ({ ingredient, addIngredient,  removeIngredient }) => {
     return (
@@ -12,11 +10,4 @@ const BuildControl = ({ ingredient, addIngredient,  removeIngredient }) => {
     )
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        addIngredient: (ingredient) => dispatch(actions.addIngredient(ingredient)),
-        removeIngredient: (ingredient) => dispatch(actions.removeIngredient(ingredient)),
-    }
-}
-
-export default connect(null, mapDispatchToProps)(BuildControl)
+export default BuildControl

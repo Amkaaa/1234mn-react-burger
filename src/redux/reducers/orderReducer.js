@@ -5,7 +5,6 @@ import {
     SAVE_ORDER_SUCCESS,
     SAVE_ORDER_START,
     SAVE_ORDER_ERROR,
-    CLEAR_ORDER
 } from '../type'
 
 const initialState = {
@@ -64,15 +63,6 @@ const reducer = (state = initialState, action) => {
                     saving: false,
                     finished: true,
                     error: action.err,
-                }
-            }
-        case CLEAR_ORDER:
-            return {
-                ...state,
-                newOrder: {
-                    saving: false,
-                    finished: false,
-                    error: null,
                 }
             }
         default:
