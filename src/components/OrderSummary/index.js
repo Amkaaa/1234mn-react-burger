@@ -1,8 +1,12 @@
-import { connect } from 'react-redux'
+import { useContext } from 'react'
+import BurgerContext from '../../context/BurgerContext'
+
 import Button from '../Utils/Button'
 import style from './style.module.css'
 
-const OrderSummary = ({ ingredients, totalPrice, nextConfirmOrder, hideConfirmOrder }) => {
+const OrderSummary = ({ nextConfirmOrder, hideConfirmOrder }) => {
+    const { burger: { ingredients, totalPrice } } = useContext(BurgerContext)
+
     return <div className={style.orderSummary}>
         <h3>Таны захиалга</h3>
         <p>Таны сонгосон орцууд</p>
@@ -21,11 +25,4 @@ const OrderSummary = ({ ingredients, totalPrice, nextConfirmOrder, hideConfirmOr
     </div>
 }
 
-const mapStateToProps = state => {
-    return {
-        ingredients: state.burgerReducer.ingredients,
-        totalPrice: state.burgerReducer.totalPrice
-    }
-}
-
-export default connect(mapStateToProps)(OrderSummary)
+export default OrderSummary

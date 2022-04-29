@@ -1,9 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import { Navigate } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { logoutUser } from '../../redux/actions/signupLoginActions'
 
-const Logout = ({ logoutUser }) => {
+import SignupLoginContext from '../../context/SignupLoginContext'
+
+const Logout = () => {
+    const { logoutUser } = useContext(SignupLoginContext)
+
     useEffect(()=> {
         logoutUser()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -12,10 +14,4 @@ const Logout = ({ logoutUser }) => {
     return <Navigate to="/" replace />
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        logoutUser: () => dispatch(logoutUser())
-    }
-}
-
-export default connect(null, mapDispatchToProps)(Logout)
+export default Logout

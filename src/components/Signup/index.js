@@ -1,12 +1,15 @@
-import { useState } from 'react'
-import { connect } from 'react-redux'
+import { useState, useContext } from 'react'
+import SignupLoginContext from '../../context/SignupLoginContext'
+
 import { Navigate } from 'react-router-dom'
 import Button from '../Utils/Button'
 import Spinner from '../Utils/Spinner'
 import style from './style.module.css'
-import { signupUser } from '../../redux/actions/signupLoginActions'
 
-const Signup = ({ loading, firebaseError, userId, signupUser}) => {
+
+const Signup = () => {
+    const { user: { loading, error: firebaseError, userId }, signupUser } = useContext(SignupLoginContext)
+
     const [email, setEmail] = useState("");
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
@@ -58,20 +61,7 @@ const Signup = ({ loading, firebaseError, userId, signupUser}) => {
             }
         </div>
     )
-        }
-
-const mapStateToProps = (state) => {
-    return {
-        loading: state.signupLoginReducer.loading,
-        firebaseError: state.signupLoginReducer.error,
-        userId: state.signupLoginReducer.userId
-    }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        signupUser: (email, password) => dispatch(signupUser(email, password))
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signup)
+export default Signup

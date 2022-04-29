@@ -1,14 +1,16 @@
-import { useEffect } from 'react'
-import { connect } from 'react-redux'
+import { useEffect, useContext } from 'react'
+import SignupLoginContext from '../../context/SignupLoginContext'
+import OrderContext from '../../context/OrderContext'
 
 import Order from '../../components/Order'
 import Spinner from '../../components/Utils/Spinner'
-import * as actions from '../../redux/actions/orderActions'
 
-const OrderPage = ({ userId, loading, orders, loadOrders }) => {
+const OrderPage = () => {
+    const { user: { userId, token } } = useContext(SignupLoginContext)
+    const { order: { orders, loading }, loadOrders } = useContext(OrderContext)
 
     useEffect(() => {
-        loadOrders(userId)
+        loadOrders(userId, token)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     
@@ -19,18 +21,4 @@ const OrderPage = ({ userId, loading, orders, loadOrders }) => {
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        orders: state.orderReducer.orders,
-        loading: state.orderReducer.loading,
-        userId: state.signupLoginReducer.userId,
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        loadOrders: (userId) => dispatch(actions.loadOrders(userId))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(OrderPage)
+export default OrderPage

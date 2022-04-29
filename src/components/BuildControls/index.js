@@ -1,9 +1,12 @@
+import { useContext } from 'react'
+import BurgerContext from '../../context/BurgerContext'
+
 import style from './style.module.css'
 import BuildControl from '../BuildControl'
 
-import {connect} from 'react-redux'
+const BuildControls = ({ showConfirmOrder }) => {
+    const { burger: { totalPrice, purchasing, ingredients } } = useContext(BurgerContext)
 
-const BuildControls = ({ ingredients, totalPrice, purchasing, showConfirmOrder }) => {
     return (
         <div className={style.buildControls}>
             <p>Бургерийн үнэ: <strong>{totalPrice}</strong></p>
@@ -26,13 +29,4 @@ const BuildControls = ({ ingredients, totalPrice, purchasing, showConfirmOrder }
     )
 }
 
-
-const mapStateToProps = state => {
-    return {
-        ingredients: state.burgerReducer.ingredients,
-        totalPrice: state.burgerReducer.totalPrice,
-        purchasing: state.burgerReducer.purchasing,
-    }
-}
-
-export default connect(mapStateToProps)(BuildControls)
+export default BuildControls

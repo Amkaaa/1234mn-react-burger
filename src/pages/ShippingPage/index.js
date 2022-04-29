@@ -1,13 +1,14 @@
-import { Route, Routes } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import BurgerContext from '../../context/BurgerContext'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 
 import Burger from '../../components/Burger'
 import ContactData from '../../components/ContactData'
 import Button from '../../components/Utils/Button'
 import style from './style.module.css'
 
-const ShippingPage = ({ totalPrice }) => {
+const ShippingPage = () => {
+    const { burger: { totalPrice } } = useContext(BurgerContext)
     const navigate = useNavigate()
     
     const goBack = () => {
@@ -36,10 +37,4 @@ const ShippingPage = ({ totalPrice }) => {
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        totalPrice: state.burgerReducer.totalPrice,
-    }
-}
-
-export default connect(mapStateToProps)(ShippingPage)
+export default ShippingPage

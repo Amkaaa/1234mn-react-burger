@@ -1,12 +1,14 @@
-import { useState } from 'react'
-import { connect } from 'react-redux'
+import { useState, useContext } from 'react'
 import { Navigate } from 'react-router-dom'
-import { loginUser } from '../../redux/actions/signupLoginActions'
+
+import SignupLoginContext from '../../context/SignupLoginContext'
 import Button from '../Utils/Button'
 import Spinner from '../Utils/Spinner'
 import style from './style.module.css'
 
-const Login = ({ loading, error, userId, loginUser }) => {
+const Login = () => {
+    const { user: { loading, error, userId }, loginUser } = useContext(SignupLoginContext);
+
     const [form, setForm] = useState({
         email: '',
         password: ''
@@ -58,18 +60,4 @@ const Login = ({ loading, error, userId, loginUser }) => {
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        loading: state.signupLoginReducer.loading,
-        error: state.signupLoginReducer.error,
-        userId: state.signupLoginReducer.userId,
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        loginUser: (email, password) => dispatch(loginUser(email, password)),
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default Login

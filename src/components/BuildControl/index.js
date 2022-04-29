@@ -1,8 +1,10 @@
+import { useContext } from 'react'
+import BurgerContext from '../../context/BurgerContext'
 import style from './style.module.css'
-import {connect} from 'react-redux'
-import * as actions from '../../redux/actions/burgerActions'
 
-const BuildControl = ({ ingredient, addIngredient,  removeIngredient }) => {
+const BuildControl = ({ ingredient }) => {
+    const { addIngredient, removeIngredient } = useContext(BurgerContext)
+
     return (
         <div className={style.buildControl}>
             <div className={style.label}>{ingredient[1].name}</div>
@@ -12,11 +14,4 @@ const BuildControl = ({ ingredient, addIngredient,  removeIngredient }) => {
     )
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        addIngredient: (ingredient) => dispatch(actions.addIngredient(ingredient)),
-        removeIngredient: (ingredient) => dispatch(actions.removeIngredient(ingredient)),
-    }
-}
-
-export default connect(null, mapDispatchToProps)(BuildControl)
+export default BuildControl

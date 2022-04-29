@@ -1,8 +1,12 @@
-import { connect } from 'react-redux'
+import { useContext } from 'react'
+import SignupLoginContext from '../../context/SignupLoginContext'
+
 import style from './style.module.css'
 import MenuItem from '../MenuItem'
 
-const Menu = ({ userId }) => {
+const Menu = () => {
+    const { user: { userId } } = useContext(SignupLoginContext)
+
     return (
         <div>
             <ul className={style.menu}>
@@ -23,10 +27,4 @@ const Menu = ({ userId }) => {
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        userId: state.signupLoginReducer.userId
-    }
-}
-
-export default connect(mapStateToProps)(Menu)
+export default Menu

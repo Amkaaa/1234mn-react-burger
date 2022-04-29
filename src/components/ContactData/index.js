@@ -1,14 +1,18 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { connect } from 'react-redux'
+import OrderContext from '../../context/OrderContext'
+import BurgerContext from '../../context/BurgerContext'
+import SignupLoginContext from '../../context/SignupLoginContext'
 
 import style from './style.module.css'
 import Button from '../Utils/Button'
 import Spinner from '../Utils/Spinner'
-import * as orderActions from '../../redux/actions/orderActions'
-import * as burgerActions from '../../redux/actions/burgerActions'
 
-const ContactData = ({ newOrderStatus, userId, ingredients, totalPrice, saveOrder, clearOrder, clearBurger }) => {
+const ContactData = () => {
+    const { saveOrder, clearOrder, order: { newOrder } } = useContext(OrderContext)
+    const { burger: { ingredients, totalPrice }, clearIngredient } = useContext(BurgerContext)
+    const { user: { userId, token } } = useContext(SignupLoginContext)
+
     const priceRef = useRef();
     const navigate = useNavigate();
 
@@ -17,19 +21,19 @@ const ContactData = ({ newOrderStatus, userId, ingredients, totalPrice, saveOrde
     const [street, setStreet] = useState("");
 
     useEffect(()=> {
-        if(newOrderStatus.finished && !newOrderStatus.error) {
+        if(newOrder.finished && !newOrder.error) {
             navigate('/orders', { replace: true })
         }
 
         return () => {
             // Цэвэрлэгч функц: Захиалгыг хоосолно.
-            if(newOrderStatus.finished && !newOrderStatus.error) {
+            if(newOrder.finished && !newOrder.error) {
                 clearOrder()
-                clearBurger()
+                clearIngredient()
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [newOrderStatus.finished, newOrderStatus.error])
+    }, [newOrder.finished, newOrder.error])
 
     const changeName = (e) => {
         
@@ -56,7 +60,7 @@ const ContactData = ({ newOrderStatus, userId, ingredients, totalPrice, saveOrde
             }
         }
         
-        saveOrder(order)
+        saveOrder(order, token)
     }
 
     return (
@@ -68,27 +72,10 @@ const ContactData = ({ newOrderStatus, userId, ingredients, totalPrice, saveOrde
             <input onChange={e => setStreet(e.target.value)} type="text" name="street" placeholder="Таны гэрийн хаяг" />
             <input onChange={e => setCity(e.target.value)} type="text" name="city" placeholder="Таны хот" />
             {
-                newOrderStatus.saving ? <Spinner /> : <Button triggerBtn={saveOrderClick} type="success" text="ИЛГЭЭХ" />
+                newOrder.saving ? <Spinner /> : <Button triggerBtn={saveOrderClick} type="success" text="ИЛГЭЭХ" />
             }
         </div>
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        ingredients: state.burgerReducer.ingredients,
-        totalPrice: state.burgerReducer.totalPrice,
-        newOrderStatus: state.orderReducer.newOrder,
-        userId: state.signupLoginReducer.userId,
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        saveOrder: (order) => dispatch(orderActions.saveOrder(order)),
-        clearBurger: () => dispatch(burgerActions.clearOrder()),
-        clearOrder: () => dispatch(orderActions.clearOrder()),
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactData)
+export default ContactData
